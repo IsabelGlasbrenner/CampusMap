@@ -1,5 +1,5 @@
 # CampusMap
-CS 407 Final Project
+CS 407 Final Project Front End
 
 
 Requirements:
