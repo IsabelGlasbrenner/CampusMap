@@ -1,0 +1,17 @@
+{
+  "name": "CS407FinalProjectCampusMap",
+  "displayName": "CS407FinalProjectCampusMap",
+  "expo": {
+    "name": "CS407FinalProjectCampusMap",
+    "slug": "CS407FinalProjectCampusMap",
+    "version": "1.0.0",
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
