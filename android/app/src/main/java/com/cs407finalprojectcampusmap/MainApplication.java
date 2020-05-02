@@ -6,6 +6,7 @@ import android.net.Uri;
 
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
+import com.oblador.vectoricons.VectorIconsPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
@@ -42,7 +43,8 @@ public class MainApplication extends Application implements ReactApplication {
 		@Override
 		protected List<ReactPackage> getPackages() {
 			List<ReactPackage> packages = new PackageList(this).getPackages();
-			packages.add(new ModuleRegistryAdapter(mModuleRegistryProvider), new MainReactPackage(), new MapsPackage());
+			packages.add(new ModuleRegistryAdapter(mModuleRegistryProvider), new MainReactPackage(),
+            new VectorIconsPackage(), new MapsPackage());
 			return packages;
 		}
 

@@ -2,10 +2,15 @@ import * as React from "react";
 import { Platform, StyleSheet, Text, View } from "react-native";
 import MapView, { Marker } from 'react-native-maps';
 import LatLng from 'react-native-maps';
+import { FloatingAction } from "react-native-floating-action";
+import { Icon } from "react-native-vector-icons";
+import FAB from "react-native-fab";
 
 const latlng = new LatLng();
 latlng.latitude = 43.0714415;
 latlng.longitude = -89.4108079;
+
+
 
 export default function Home() {
 	return (
@@ -25,6 +30,11 @@ export default function Home() {
 					description={"descrip"}
 				/>
 			</MapView>
+			<FloatingAction>
+				onPressItem={name => {
+					console.log(`selected button: ${name}`);
+				}}
+			</FloatingAction>
 		</View>
 	);
 }
