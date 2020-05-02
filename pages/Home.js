@@ -1,11 +1,11 @@
 import * as React from "react";
 import { Platform, StyleSheet, Text, View } from "react-native";
-import MapView from 'react-native-maps';
+import MapView, { Marker } from 'react-native-maps';
+import LatLng from 'react-native-maps';
 
-const instructions = Platform.select({
-	ios: `Press Cmd+R to reload,\nCmd+D or shake for dev menu`,
-	android: `Double tap R on your keyboard to reload,\nShake or press menu button for dev menu`,
-});
+const latlng = new LatLng();
+latlng.latitude = 43.0714415;
+latlng.longitude = -89.4108079;
 
 export default function Home() {
 	return (
@@ -18,7 +18,13 @@ export default function Home() {
 					latitudeDelta: 0.0922,
 					longitudeDelta: 0.0421,
 				}}
-			/>
+			>
+				<MapView.Marker
+					coordinate={latlng}
+					title={"hello"}
+					description={"descrip"}
+				/>
+			</MapView>
 		</View>
 	);
 }
