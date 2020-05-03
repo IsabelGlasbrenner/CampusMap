@@ -12,8 +12,17 @@ latlng.latitude = 43.0714415;
 latlng.longitude = -89.4108079;
 
 let passcode;
+let buildings;
+let email;
 
 export default class AddItem2 extends React.Component {
+
+	static navigationOptions = ({ navigation }) => {
+		return {
+			title: 'Step 2',
+		};
+	};
+
 
 	onChangeText(text) {
 		console.log(text);
@@ -23,7 +32,8 @@ export default class AddItem2 extends React.Component {
 	render() {
 		const { navigate } = this.props.navigation;
 		console.log(this.props);
-		const { email } = "isabel.glasbrener@gmail.com";
+		email = this.props.navigation.getParam('email', null);
+		buildings = this.props.navigation.getParam('buildings', []);
 
 		async function onPress(navigate) {
 			console.log("email: " + email);
@@ -40,20 +50,21 @@ export default class AddItem2 extends React.Component {
 			} catch (err) {
 				console.log("Error fetching data-----------", err);
 			}
-			navigate('AddItem3')
+			navigate('AddItem3', { buildings: buildings });
 		}
 
 		return (
 			<View style={styles.container}>
-				<Text>Enter the 4 digit code sent to your email.</Text>
+				<Text style={styles.subheader}>Enter the 4 digit code sent to your email.</Text>
 				<TextInput
-					style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
+					style={styles.input}
 					onChangeText={text => this.onChangeText(text)}
 				/>
 				<Button
+					style={styles.button}
 					onPress={() => onPress(navigate)}
-					color="#841584"
-					title="2"
+					color="#c5050c"
+					title="VERIFY CODE"
 				/>
 			</View>
 		);
@@ -62,6 +73,37 @@ export default class AddItem2 extends React.Component {
 
 const styles = StyleSheet.create({
 	container: {
-
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center',
 	},
+	header: {
+		textAlign: 'center',
+		position: 'absolute',
+		top: 40,
+		width: 400,
+		fontSize: 30,
+		fontFamily: 'serif'
+	},
+	subheader: {
+		width: 300
+	},
+	input: {
+		width: 300,
+		height: 40,
+		borderColor: 'gray',
+		borderWidth: 1,
+		margin: 10,
+		borderRadius: 7
+	},
+	button: {
+		width: 300,
+		fontSize: 20,
+		borderRadius: 5
+	},
+	error: {
+		width: 270,
+		color: "#c5050c",
+		margin: 20
+	}
 });

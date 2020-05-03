@@ -2,34 +2,80 @@ import * as React from "react";
 import { Platform, StyleSheet, Text, View } from "react-native";
 import MapView, { Marker } from 'react-native-maps';
 import LatLng from 'react-native-maps';
-import { FloatingAction } from "react-native-floating-action";
-import { Icon } from "react-native-vector-icons";
-import FAB from "react-native-fab";
 import { TextInput, Button, Picker } from 'react-native';
 
 const latlng = new LatLng();
 latlng.latitude = 43.0714415;
 latlng.longitude = -89.4108079;
 
+let description;
+let buildings;
 
-export default class AddItem2 extends React.Component {
+const initialState = {
+	pickedValue: "",
+	buildingKey: "",
+};
 
+export default class AddItem3 extends React.Component {
 
-	onPress(navigate) {
-		console.log(this.state.pickedValue);
-		navigate('UWMadison', { typeOfItem: this.state.pickedValue })
+	constructor(props) {
+		super(props);
+		this.state = initialState;
 	}
+
+	static navigationOptions = ({ navigation }) => {
+		return {
+			title: 'Step 3',
+		};
+	};
 
 	setDestination(coordinates) {
-		console.log(coordinates);
+		//find the building that this belongs too
+		let prevSmallLat = buildings[0].latlng.latitude - coordinates.latitude;
+		let prevSmallLng = buildings[0].latlng.longitude - coordinates.longitude;
+		let buildingKey;
+		for (let i = 0; i < buildings.length; i++) {
+			if (buildings[i].latlng.latitude - coordinates.latitude < prevSmallLat && buildings[i].latlng.longitude - coordinates.longitude < prevSmallLng) {
+				buildingKey = buildings[i].key;
+				prevSmallLat = buildings[i].latlng.latitude - coordinates.latitude;
+				prevSmallLng = buildings[i].latlng.longitude - coordinates.longitude;
+			}
+		}
+		this.setState({ buildingKey: buildingKey });
 	}
 
+	addDescription(text) {
+		description = text;
+	}
 
 	render() {
 		const { navigate } = this.props.navigation;
+		buildings = this.props.navigation.getParam('buildings', []);
+
+		async function addItem(navigate, typeOfItem, buildingKey) {
+			console.log(typeOfItem);
+			if (description != null) {
+				try {
+					const postUtil = await fetch('http://172.220.7.76:8888/get_code', {
+						method: 'post',
+						body: JSON.stringify({
+							type: typeOfItem,
+							description: description,
+							key: buildingKey
+						})
+					});
+					const response = await postUtil.json();
+					console.log(response);
+				} catch (err) {
+					console.log("Error fetching data-----------", err);
+				}
+				navigate('UWMadison', { typeOfItem: typeOfItem });
+			}
+		}
+
 		return (
 			<View style={styles.container}>
-
+				<Text style={{ width: 300, position: 'absolute', top: 10, left: 140 }}>Pick the item you'd like to add.</Text>
 				<Picker
 					style={styles.picker}
 					selectedValue={(this.state && this.state.pickedValue) || 'Building'}
@@ -38,21 +84,20 @@ export default class AddItem2 extends React.Component {
 					<Picker.Item label="Printer" value="Printers" />
 					<Picker.Item label="Microwave" value="Microwaves" />
 					<Picker.Item label="Restroom" value="Restrooms" />
-					<Picker.Item label="Building" value="Buildings" />
 				</Picker>
-
-				<Button
-					style={styles.button}
-					onPress={() => this.onPress(navigate)}
-					title="3"
+				<Text style={{ width: 300, position: 'absolute', top: 120, left: 15 }}>Add a description.</Text>
+				<TextInput
+					style={styles.input}
+					onChangeText={text => this.addDescription(text)}
 				/>
+				<Text style={{ width: 300, position: 'absolute', bottom: 560, left: 100 }}>Drag and drop the pin at its location.</Text>
 				<MapView
 					style={styles.map}
 					initialRegion={{
 						latitude: 43.0714415,
 						longitude: -89.4108079,
-						latitudeDelta: 0.0922,
-						longitudeDelta: 0.0421,
+						latitudeDelta: 0.0221,
+						longitudeDelta: 0.0221,
 					}}>
 					<Marker
 						ref={(ref) => { this.marker = ref; }}
@@ -60,10 +105,15 @@ export default class AddItem2 extends React.Component {
 						onDragEnd={(e) => this.setDestination(e.nativeEvent.coordinate)}
 						coordinate={latlng}
 						position={latlng}
-						centerOffset={{ x: -18, y: -60 }}
-						anchor={{ x: 0.69, y: 1 }}
 					/>
 				</MapView>
+				<View style={styles.button}>
+					<Button
+						onPress={() => addItem(navigate, this.state.pickedValue, this.state.buildingKey)}
+						color="#c5050c"
+						title="ADD MARKER"
+					/>
+				</View>
 			</View>
 		);
 	}
@@ -76,28 +126,40 @@ const styles = StyleSheet.create({
 		left: 0,
 		right: 0,
 		bottom: 0,
-		justifyContent: 'flex-end',
-		alignItems: 'center'
+		backgroundColor: "white",
 	},
 	map: {
 		position: 'absolute',
-		height: 400,
 		left: 0,
 		right: 0,
-		bottom: 100,
-	},
-	picker: {
-		position: 'absolute',
-		top: 30,
-		height: 50,
-		width: 200
+		bottom: 50,
+		height: 500,
 	},
 	button: {
 		position: 'absolute',
-		bottom: 20,
-		top: 0,
+		left: 0,
+		bottom: 4,
+		right: 0,
+		fontSize: 20,
+		borderRadius: 5
+	},
+	picker: {
+		position: 'absolute',
+		top: 40,
+		left: 100,
 		width: 300,
+	},
+	input: {
+		position: 'absolute',
+		top: 140,
 		left: 0,
 		right: 0,
-	}
+		height: 40,
+		borderColor: 'gray',
+		borderWidth: 1,
+		margin: 10,
+		borderRadius: 7
+	},
+
+
 });

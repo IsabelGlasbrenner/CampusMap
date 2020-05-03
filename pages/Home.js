@@ -1,10 +1,11 @@
 import * as React from "react";
-import { Platform, StyleSheet, Text, View } from "react-native";
+import { Platform, StyleSheet, Text, View, ActivityIndicator } from "react-native";
 import MapView, { Marker } from 'react-native-maps';
 import LatLng from 'react-native-maps';
 import ActionButton from "react-native-action-button";
 import Icon from 'react-native-vector-icons/Ionicons';
 import { List } from "react-native-paper";
+import { FloatingAction } from "react-native-floating-action";
 
 const latlng = new LatLng();
 latlng.latitude = 43.0714415;
@@ -26,9 +27,37 @@ const initialState = {
 	loading: true
 };
 
+const actions = [
+	{
+		text: "Add a Marker",
+		color: "#e6e6e6",
+		name: "add_marker",
+		position: 1
+	},
+	{
+		text: "Change Campus",
+		color: "#bdbdbd",
+		name: "change_campus",
+		position: 2
+	},
+	{
+		text: "View Other Items",
+		color: "#969696",
+		name: "select_items",
+		position: 3
+	},
+];
+
+
 let typeOfItems;
 
 export default class Home extends React.Component {
+
+	static navigationOptions = ({ navigation }) => {
+		return {
+			title: 'UW-Madison Campus Map',
+		};
+	};
 
 	constructor(props) {
 		super(props);
@@ -88,29 +117,38 @@ export default class Home extends React.Component {
 						utilityDescription: utility[2],
 						latlng: buildingLatlng
 					});
-					console.log("add a printer");
 				} else if (utility[2] == "restroom") {
 					restrooms.push({
 						key: utility[0],
 						utilityDescription: utility[1],
 						latlng: buildingLatlng
 					});
-					console.log("add a restroom");
 				}
 			}
 			this.setState({ loading: false, campusBuildings: campusBuildings, microwaves: microwaves, printers: printers, restrooms: restrooms });
 		}
 	}
 
+	onActionSelect(itemSelected, navigate) {
+		console.log(itemSelected);
+		if (itemSelected == "change_campus") {
+			navigate('UniversityOptions');
+		} else if (itemSelected == "add_marker") {
+			navigate('AddItem1', { buildings: this.state.campusBuildings });
+		} else if (itemSelected == "select_items") {
+			navigate('PickMapItem');
+		}
+	}
+
 	render() {
 		const { navigate } = this.props.navigation;
-
 		typeOfItems = this.props.navigation.getParam('typeOfItem', "Buildings");
-		console.log(typeOfItems);
 
 		let view;
 		if (this.state.loading) {
-			view = <Text>Loading</Text>;
+			view = <View style={[styles.loadingContainer, styles.horizontal]}>
+				<ActivityIndicator size="large" color="#c5050c" />
+			</View>;
 		} else {
 			if (typeOfItems == "Printers") {
 				view = <MapView
@@ -200,8 +238,11 @@ export default class Home extends React.Component {
 		return (
 			<View style={styles.container}>
 				{view}
-				<ActionButton buttonColor="rgba(231,76,60,1)" onPress={() => navigate('AddItem1')}>
-				</ActionButton>
+				<FloatingAction
+					actions={actions}
+					color="rgba(231,76,60,1)"
+					onPressItem={(itemName) => this.onActionSelect(itemName, navigate)}>
+				</FloatingAction>
 			</View>
 		);
 	}
@@ -229,4 +270,13 @@ const styles = StyleSheet.create({
 		height: 22,
 		color: 'white',
 	},
+	loadingContainer: {
+		flex: 1,
+		justifyContent: "center"
+	},
+	horizontal: {
+		flexDirection: "row",
+		justifyContent: "space-around",
+		padding: 10
+	}
 });

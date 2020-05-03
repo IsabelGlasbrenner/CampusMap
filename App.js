@@ -5,6 +5,8 @@ import Home from "./pages/Home";
 import AddItem1 from "./pages/AddItem1";
 import AddItem2 from "./pages/AddItem2";
 import AddItem3 from "./pages/AddItem3";
+import PickMapItem from "./pages/PickMapItem";
+import UniversityOptions from "./pages/UniversityOptions";
 import { createAppContainer } from "react-navigation";
 import { createStackNavigator } from 'react-navigation-stack';
 
@@ -21,10 +23,11 @@ const App = createStackNavigator({
 	AddItem1: { screen: AddItem1 },
 	AddItem2: { screen: AddItem2 },
 	AddItem3: { screen: AddItem3 },
-
+	PickMapItem: { screen: PickMapItem },
+	UniversityOptions: { screen: UniversityOptions },
 },
 	{
-		initialRouteName: 'UWMadison',
+		initialRouteName: 'UniversityOptions',
 	}
 );
 
