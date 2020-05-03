@@ -11,6 +11,7 @@ const latlng = new LatLng();
 latlng.latitude = 43.0714415;
 latlng.longitude = -89.4108079;
 
+let email = "123@abc.com";
 
 
 export default class AddItem1 extends React.Component {
@@ -20,16 +21,29 @@ export default class AddItem1 extends React.Component {
 	}
 
 	onChangeText(text) {
+		email = text;
 		console.log(text);
-	}
-
-	onPress(navigate) {
-		console.log("PRessed");
-		navigate('AddItem2')
 	}
 
 	render() {
 		const { navigate } = this.props.navigation;
+
+		async function onPress(navigate) {
+			try {
+				const postEmail = await fetch('http://172.220.7.76:8888/get_code', {
+					method: 'post',
+					body: JSON.stringify({
+						email: email,
+					})
+				});
+				const response = await postEmail.json();
+				console.log(response);
+			} catch (err) {
+				console.log("Error fetching data-----------", err);
+			}
+			navigate('AddItem2', { email: email });
+		}
+
 		return (
 			<View style={styles.container}>
 				<Text>We want our app to make life easier for students,
@@ -41,7 +55,7 @@ export default class AddItem1 extends React.Component {
 					onChangeText={text => this.onChangeText(text)}
 				/>
 				<Button
-					onPress={() => this.onPress(navigate)}
+					onPress={() => onPress(navigate)}
 					color="#841584"
 					title="hey"
 				/>

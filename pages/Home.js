@@ -26,6 +26,8 @@ const initialState = {
 	loading: true
 };
 
+let typeOfItems;
+
 export default class Home extends React.Component {
 
 	constructor(props) {
@@ -95,11 +97,6 @@ export default class Home extends React.Component {
 					});
 					console.log("add a restroom");
 				}
-				console.log("Printers: " + printers.length);
-				console.log("campusBuildings: " + campusBuildings.length);
-				console.log("microwaves: " + microwaves.length);
-				console.log("restrooms: " + restrooms.length);
-
 			}
 			this.setState({ loading: false, campusBuildings: campusBuildings, microwaves: microwaves, printers: printers, restrooms: restrooms });
 		}
@@ -107,14 +104,9 @@ export default class Home extends React.Component {
 
 	render() {
 		const { navigate } = this.props.navigation;
-		//const { typeOfItems } = this.props.typeOfItems;
 
-		console.log("state Printers: " + this.state.printers.length);
-		console.log("state campusBuildings: " + this.state.campusBuildings.length);
-		console.log("state microwaves: " + this.state.microwaves.length);
-		console.log("state restrooms: " + this.state.restrooms.length);
-
-		let typeOfItems = "Microwaves";
+		typeOfItems = this.props.navigation.getParam('typeOfItem', "Buildings");
+		console.log(typeOfItems);
 
 		let view;
 		if (this.state.loading) {
