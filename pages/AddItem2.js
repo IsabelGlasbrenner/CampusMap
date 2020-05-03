@@ -5,19 +5,38 @@ import LatLng from 'react-native-maps';
 import { FloatingAction } from "react-native-floating-action";
 import { Icon } from "react-native-vector-icons";
 import FAB from "react-native-fab";
+import { TextInput, Button } from 'react-native';
 
 const latlng = new LatLng();
 latlng.latitude = 43.0714415;
 latlng.longitude = -89.4108079;
 
 
+export default class AddItem2 extends React.Component {
 
-export default class AddItem extends React.Component {
+	onChangeText(text) {
+		console.log(text);
+	}
+
+	onPress(navigate) {
+		console.log("PRessed");
+		navigate('AddItem3')
+	}
+
 	render() {
 		const { navigate } = this.props.navigation;
 		return (
 			<View style={styles.container}>
-				<Text> YAY ADDITEM</Text>
+				<Text>Enter the 4 digit code sent to your email.</Text>
+				<TextInput
+					style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
+					onChangeText={text => this.onChangeText(text)}
+				/>
+				<Button
+					onPress={() => this.onPress(navigate)}
+					color="#841584"
+					title="2"
+				/>
 			</View>
 		);
 	}
@@ -25,19 +44,6 @@ export default class AddItem extends React.Component {
 
 const styles = StyleSheet.create({
 	container: {
-		position: 'absolute',
-		top: 0,
-		left: 0,
-		right: 0,
-		bottom: 0,
-		justifyContent: 'flex-end',
-		alignItems: 'center'
+
 	},
-	map: {
-		position: 'absolute',
-		top: 0,
-		left: 0,
-		right: 0,
-		bottom: 0
-	}
 });

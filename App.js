@@ -2,7 +2,9 @@ import * as React from "react";
 import { Platform, StyleSheet, Text, View } from "react-native";
 import Routes from "./Routes.js";
 import Home from "./pages/Home";
-import AddItem from "./pages/AddItem";
+import AddItem1 from "./pages/AddItem1";
+import AddItem2 from "./pages/AddItem2";
+import AddItem3 from "./pages/AddItem3";
 import { createAppContainer } from "react-navigation";
 import { createStackNavigator } from 'react-navigation-stack';
 
@@ -16,7 +18,10 @@ const App = createStackNavigator({
 	UWMadison: { screen: Home },
 	//First entry by default be our first screen 
 	//if we do not define initialRouteName
-	AddItem: { screen: AddItem },
+	AddItem1: { screen: AddItem1 },
+	AddItem2: { screen: AddItem2 },
+	AddItem3: { screen: AddItem3 },
+
 },
 	{
 		initialRouteName: 'UWMadison',
