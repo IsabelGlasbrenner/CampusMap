@@ -22,7 +22,7 @@ export default class UniversityOptions extends React.Component {
 	render() {
 		return (
 			<ImageBackground
-				source={require('../images/homeBG.png')}
+				source={require('../images/home_bg.png')}
 				style={{
 					position: 'absolute',
 					top: 0,
