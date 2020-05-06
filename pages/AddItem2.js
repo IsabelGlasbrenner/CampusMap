@@ -23,9 +23,7 @@ export default class AddItem2 extends React.Component {
 		};
 	};
 
-
 	onChangeText(text) {
-		console.log(text);
 		passcode = text;
 	}
 
@@ -37,25 +35,33 @@ export default class AddItem2 extends React.Component {
 
 		async function onPress(navigate) {
 			console.log("email: " + email);
+			console.log("code: " + passcode);
 			try {
 				const postEmail = await fetch('http://172.220.7.76:8888/verify_code', {
 					method: 'post',
+					mode: 'cors',
+					headers: {
+						'Content-Type': 'application/json',
+					},
 					body: JSON.stringify({
 						email: email,
 						code: passcode,
 					})
 				});
 				const response = await postEmail.json();
-				console.log(response);
+				let message = Object.values(response)[1];
+				console.log(message);
+				if (message) {
+					navigate('AddItem3', { buildings: buildings, email: email });
+				}
 			} catch (err) {
 				console.log("Error fetching data-----------", err);
 			}
-			navigate('AddItem3', { buildings: buildings });
 		}
 
 		return (
 			<View style={styles.container}>
-				<Text style={styles.subheader}>Enter the 4 digit code sent to your email.</Text>
+				<Text style={styles.subheader}>Enter the code sent to your email.</Text>
 				<TextInput
 					style={styles.input}
 					onChangeText={text => this.onChangeText(text)}

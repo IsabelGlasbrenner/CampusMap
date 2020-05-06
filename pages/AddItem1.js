@@ -47,8 +47,12 @@ export default class AddItem1 extends React.Component {
 				try {
 					const postEmail = await fetch('http://172.220.7.76:8888/get_code', {
 						method: 'post',
+						mode: 'cors',
+						headers: {
+							'Content-Type': 'application/json',
+						},
 						body: JSON.stringify({
-							email: email,
+							email: email
 						})
 					});
 					const response = await postEmail.json();
