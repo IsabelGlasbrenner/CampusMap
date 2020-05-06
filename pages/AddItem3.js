@@ -10,6 +10,7 @@ latlng.longitude = -89.4108079;
 
 let description;
 let buildings;
+let email;
 
 const initialState = {
 	pickedValue: "",
@@ -51,13 +52,25 @@ export default class AddItem3 extends React.Component {
 	render() {
 		const { navigate } = this.props.navigation;
 		buildings = this.props.navigation.getParam('buildings', []);
+		email = this.props.navigation.getParam('email', null);
 
 		async function addItem(navigate, typeOfItem, buildingKey) {
-			console.log(typeOfItem);
+			if (typeOfItem == null) {
+				//Picker choice was not changed - default is printer
+				typeOfItem = "Printer";
+			}
 			if (description != null) {
+				console.log("email: " + email);
+				console.log("type: " + typeOfItem);
+				console.log("description: " + description);
+				console.log("key: " + buildingKey);
 				try {
-					const postUtil = await fetch('http://172.220.7.76:8888/get_code', {
+					const postUtil = await fetch('http://172.220.7.76:8888/utility', {
 						method: 'post',
+						mode: 'cors',
+						headers: {
+							'Content-Type': 'application/json',
+						},
 						body: JSON.stringify({
 							type: typeOfItem,
 							description: description,

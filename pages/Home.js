@@ -102,27 +102,38 @@ export default class Home extends React.Component {
 
 			for (let j = 0; j < utilities.length; j++) {
 				let utility = Object.values(Object.values(utilities)[j]);
-				console.log("hey");
-				console.log(utility);
-				if (utility[1] == "Microwave") {
-					microwaves.push({
-						key: utility[0],
-						utilityDescription: utility[2],
-						latlng: buildingLatlng
-					});
-					console.log("add a mic");
-				} else if (utility[1] == "Printer") {
-					printers.push({
-						key: utility[0],
-						utilityDescription: utility[2],
-						latlng: buildingLatlng
-					});
-				} else if (utility[2] == "restroom") {
-					restrooms.push({
-						key: utility[0],
-						utilityDescription: utility[1],
-						latlng: buildingLatlng
-					});
+				if (utility[3]) {
+					if (utility[1] == "Microwave") {
+						microwaves.push({
+							key: utility[0],
+							utilityDescription: utility[2],
+							latlng: buildingLatlng
+						});
+					} else if (utility[2] == "Microwave") {
+						microwaves.push({
+							key: utility[0],
+							utilityDescription: utility[1],
+							latlng: buildingLatlng
+						});
+					} else if (utility[1] == "Printer" || utility[1] == "printer") {
+						printers.push({
+							key: utility[0],
+							utilityDescription: utility[2],
+							latlng: buildingLatlng
+						});
+					} else if (utility[2] == "Printer" || utility[2] == "printer") {
+						printers.push({
+							key: utility[0],
+							utilityDescription: utility[1],
+							latlng: buildingLatlng
+						});
+					} else if (utility[2] == "Restrooms" || utility[2] == "restrooms") {
+						restrooms.push({
+							key: utility[0],
+							utilityDescription: utility[1],
+							latlng: buildingLatlng
+						});
+					}
 				}
 			}
 			this.setState({ loading: false, campusBuildings: campusBuildings, microwaves: microwaves, printers: printers, restrooms: restrooms });
